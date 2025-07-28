@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: tars-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Tars@2019'
+      MYSQL_USER: tarsAdmin
+      MYSQL_PASSWORD: 'Tars@2019' # Changed to match what Tars is using
+      MYSQL_DATABASE: mysql # 指定默认数据库为mysql
+      MYSQL_GRANT_PRIVILEGES: "true" # 授予tarsAdmin用户管理员权限
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./source/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - tars-net
+    restart: always
+    command: --innodb_use_native_aio=0 --character-set-server=utf8 --collation-server=utf8_general_ci --default-authentication-plugin=mysql_native_password
+  tars-framework:
+    image: tarscloud/framework:latest
+    container_name: tars-framework
+    ports:
+      - "3000:3000" # Web管理界面端口
+      - "3001:3001" # Registry服务端口
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_ROOT_PASSWORD: 'Tars@2019'
+      MYSQL_USER: tarsAdmin
+      MYSQL_PASSWORD: 'Tars@2019' # Changed to match what Tars is using
+      DB_TARS_PASSWORD: 'Tars@2019' # Changed to match what Tars is using
+      REBUILD: "false"
+      INET: eth0
+      SLAVE: "false"
+    volumes:
+      - ./tars-data:/data
+    networks:
+      - tars-net
+    restart: always
+    depends_on:
+      - mysql
+
+networks:
+  tars-net:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  tars-data:

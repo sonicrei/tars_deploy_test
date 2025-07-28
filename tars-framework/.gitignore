@@ -1,0 +1,22 @@
+# MySQL data files
+mysql-data/
+
+# Tars data files
+tars-data/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+.env
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*~

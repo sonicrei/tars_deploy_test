@@ -1,0 +1,20 @@
+services:
+  tars-node1:
+    image: tars-node:latest
+    ports:
+      - "15000-16000:15000-16000"
+    networks:
+      - tars_framework_tars-net
+    privileged: true
+
+  tars-node2:
+    image: tars-node:latest
+    ports:
+      - "25000-26000:25000-26000"
+    networks:
+      - tars_framework_tars-net
+    privileged: true
+
+networks:
+  tars_framework_tars-net:
+    external: true
